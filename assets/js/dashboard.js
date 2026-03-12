@@ -233,10 +233,3 @@ function showAdminPanel() {
     }
     
 }
-
-/**
- * Initialize charts (placeholder for chart implementation)
- */
-function initCharts() {
-    // In a real implementation, this would create charts using a library like Chart.js
-}
