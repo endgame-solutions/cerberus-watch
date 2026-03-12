@@ -80,3 +80,34 @@ def test_quick_exit_functionality_placeholder():
     print("3. Click 'Quick Exit'")
     print("4. Assert window.location.href is the neutral page.")
     assert True
+
+def test_login_api():
+    """
+    Tests the /api/login endpoint.
+    """
+    # Test successful login
+    response = client.post("/api/login", json={"username": "testuser", "password": "password123"})
+    assert response.status_code == 200
+    json_response = response.json()
+    assert json_response["status"] == "success"
+    assert json_response["username"] == "testuser"
+    assert "token" in json_response
+
+    # Test failed login (empty password)
+    response = client.post("/api/login", json={"username": "testuser", "password": ""})
+    assert response.status_code == 401
+    assert "detail" in response.json()
+
+def test_verify_admin_api():
+    """
+    Tests the /api/verify-admin endpoint.
+    """
+    # Test successful admin verification
+    response = client.post("/api/verify-admin", json={"code": "cerberus123"})
+    assert response.status_code == 200
+    assert response.json() == {"status": "success", "admin": True}
+
+    # Test failed admin verification
+    response = client.post("/api/verify-admin", json={"code": "wrongcode"})
+    assert response.status_code == 403
+    assert "detail" in response.json()

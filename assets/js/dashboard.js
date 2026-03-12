@@ -115,19 +115,19 @@ function checkAuthStatus() {
     
     if (loginRequired && !isAuthenticated) {
         // Redirect to login page if not authenticated
-        if (!window.location.pathname.includes('login.html')) {
-            window.location.href = 'login.html';
+        if (!window.location.pathname.includes('/login')) {
+            window.location.href = '/login';
         }
-    } else if (isAuthenticated && window.location.pathname.includes('login.html')) {
+    } else if (isAuthenticated && window.location.pathname.includes('/login')) {
         // Redirect to dashboard if already authenticated
-        window.location.href = 'index.html';
+        window.location.href = '/dashboard';
     }
 }
 
 /**
  * Handle login form submission
  */
-function handleLogin() {
+async function handleLogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     
@@ -137,13 +137,30 @@ function handleLogin() {
         return;
     }
     
-    // In a real implementation, this would make an API call
-    // For demo purposes, accept any non-empty credentials
-    localStorage.setItem('cerberus_authenticated', 'true');
-    localStorage.setItem('cerberus_username', username);
-    
-    // Redirect to dashboard
-    window.location.href = 'index.html';
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            localStorage.setItem('cerberus_authenticated', 'true');
+            localStorage.setItem('cerberus_username', result.username);
+
+            // Redirect to dashboard
+            window.location.href = '/dashboard';
+        } else {
+            const errorData = await response.json();
+            showAlert(errorData.detail || 'Login failed. Please check your credentials.', 'danger');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        showAlert('An error occurred during login. Please try again later.', 'danger');
+    }
 }
 
 /**
@@ -155,7 +172,7 @@ function handleLogout() {
     localStorage.removeItem('cerberus_admin');
     
     // Redirect to login page
-    window.location.href = 'login.html';
+    window.location.href = '/login';
 }
 
 /**
@@ -191,11 +208,24 @@ function showAlert(message, type = 'info') {
  * This is a simple implementation for demo purposes
  * In a real application, this would be more secure
  */
-function checkAdminCode(code) {
-    // The secret code is "cerberus123"
-    if (code === 'cerberus123') {
-        localStorage.setItem('cerberus_admin', 'true');
-        showAdminPanel();
+async function checkAdminCode(code) {
+    if (!code) return;
+
+    try {
+        const response = await fetch('/api/verify-admin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code }),
+        });
+
+        if (response.ok) {
+            localStorage.setItem('cerberus_admin', 'true');
+            showAdminPanel();
+        }
+    } catch (error) {
+        console.error('Admin verification error:', error);
     }
 }
 

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -7,11 +7,21 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# Mount static files
 app.mount("/static", StaticFiles(directory="heads/athena"), name="static")
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 @app.get("/")
 async def read_index():
     return FileResponse('heads/athena/athena.html')
+
+@app.get("/login")
+async def read_login():
+    return FileResponse('login.html')
+
+@app.get("/dashboard")
+async def read_dashboard():
+    return FileResponse('index.html')
 
 origins = [
     "http://127.0.0.1:8000",
@@ -30,6 +40,13 @@ class AnalysisInput(BaseModel):
     phone: Optional[str] = None
     social: Optional[str] = None
     dating_profile: Optional[str] = None
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+class AdminVerifyRequest(BaseModel):
+    code: str
 
 class AthenaAnalyzer:
     def __init__(self, analysis_input: AnalysisInput):
@@ -126,3 +143,31 @@ async def analyze(analysis_input: AnalysisInput):
     risk_analysis_result["summary"] = f"{identity_result['message']} {background_info['background_info']}"
 
     return risk_analysis_result
+
+@app.post("/api/login")
+async def login(login_request: LoginRequest):
+    """
+    Handle user login (backend verification).
+    In a real implementation, this would check against a database.
+    For demo purposes, we'll accept any non-empty credentials.
+    """
+    if not login_request.username or not login_request.password:
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+
+    # Mock authentication success with a mock session token
+    return {
+        "status": "success",
+        "username": login_request.username,
+        "token": "mock_session_token_for_demo"
+    }
+
+@app.post("/api/verify-admin")
+async def verify_admin(admin_request: AdminVerifyRequest):
+    """
+    Handle admin code verification (backend verification).
+    """
+    # The secret code is "cerberus123"
+    if admin_request.code == "cerberus123":
+        return {"status": "success", "admin": True}
+    else:
+        raise HTTPException(status_code=403, detail="Invalid admin code")
