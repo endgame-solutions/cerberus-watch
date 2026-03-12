@@ -32,23 +32,23 @@ class AnalysisInput(BaseModel):
     dating_profile: Optional[str] = None
 
 class AthenaAnalyzer:
+    # Mock database of online profiles with richer background info.
+    mock_profiles = {
+        "john doe": {
+            "status": "verified",
+            "verified_on": ["LinkedIn", "Twitter"],
+            "background_summary": "Public profiles on LinkedIn and Twitter show a consistent work history. No public posts containing aggressive language or concerning affiliations were found."
+        },
+        "jane smith": {
+            "status": "partially_verified",
+            "verified_on": ["Facebook"],
+            "background_summary": "A single public profile was found on Facebook. The profile is new with limited activity, making a comprehensive background assessment difficult."
+        },
+    }
+
     def __init__(self, analysis_input: AnalysisInput):
         self.input = analysis_input
         self.search_name = self.input.name.lower() if self.input.name else None
-
-        # Mock database of online profiles with richer background info.
-        self.mock_profiles = {
-            "john doe": {
-                "status": "verified",
-                "verified_on": ["LinkedIn", "Twitter"],
-                "background_summary": "Public profiles on LinkedIn and Twitter show a consistent work history. No public posts containing aggressive language or concerning affiliations were found."
-            },
-            "jane smith": {
-                "status": "partially_verified",
-                "verified_on": ["Facebook"],
-                "background_summary": "A single public profile was found on Facebook. The profile is new with limited activity, making a comprehensive background assessment difficult."
-            },
-        }
 
     def verify_identity(self):
         """
