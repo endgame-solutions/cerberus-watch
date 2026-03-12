@@ -63,9 +63,9 @@ class AthenaAnalyzer:
         if profile:
             message = f"Identity {profile['status']} for {self.input.name}. Found profiles on: {', '.join(profile['verified_on'])}."
             return {"status": profile['status'], "message": message}
-        else:
-            message = f"Could not verify identity for {self.input.name}. No public profiles found."
-            return {"status": "unverified", "message": message}
+
+        message = f"Could not verify identity for {self.input.name}. No public profiles found."
+        return {"status": "unverified", "message": message}
 
     def gather_background_info(self):
         """
@@ -76,9 +76,9 @@ class AthenaAnalyzer:
         profile = self.mock_profiles.get(self.search_name)
         if profile:
             return {"background_info": profile["background_summary"]}
-        else:
-            # This case should ideally not be hit if verification runs first.
-            return {"background_info": "No background information could be gathered."}
+
+        # This case should ideally not be hit if verification runs first.
+        return {"background_info": "No background information could be gathered."}
 
     def analyze_risk(self, background_info):
         """
