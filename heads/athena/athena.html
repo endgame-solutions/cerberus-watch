@@ -186,8 +186,10 @@
                 const results = await response.json();
 
                 // Display results
-                document.getElementById('safety-score').innerHTML = `<h2>Safety Score: <span style="color: #d1b894;">${results.safety_score}</span></h2>`;
-                document.getElementById('summary').innerHTML = `<p>${results.summary}</p>`;
+                document.getElementById('safety-score').innerHTML = '<h2>Safety Score: <span style="color: #d1b894;" id="safety-score-value"></span></h2>';
+                document.getElementById('safety-score-value').textContent = results.safety_score;
+                document.getElementById('summary').innerHTML = '<p id="summary-text"></p>';
+                document.getElementById('summary-text').textContent = results.summary;
 
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);

@@ -24,11 +24,6 @@ function initDashboard() {
     // Update stats with random data (for demo purposes)
     updateStats();
     
-    // Initialize charts if they exist
-    if (typeof initCharts === 'function') {
-        initCharts();
-    }
-    
     // Check authentication status
     checkAuthStatus();
 }
