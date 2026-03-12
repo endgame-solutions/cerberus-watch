@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
  * Initialize the dashboard components
  */
 function initDashboard() {
-    console.log('Initializing Cerberus Dashboard...');
     
     // Update stats with random data (for demo purposes)
     updateStats();
@@ -34,9 +33,9 @@ function initDashboard() {
 function setupEventListeners() {
     // Mobile sidebar toggle
     const sidebarToggle = document.getElementById('sidebar-toggle');
-    if (sidebarToggle) {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebarToggle && sidebar) {
         sidebarToggle.addEventListener('click', function() {
-            const sidebar = document.querySelector('.sidebar');
             sidebar.classList.toggle('active');
         });
     }
@@ -98,7 +97,6 @@ function updateStats() {
         stat.textContent = value;
     });
     
-    console.log('Stats updated');
 }
 
 /**
@@ -183,14 +181,29 @@ function showAlert(message, type = 'info') {
 
 /**
  * Check for admin access code
- * This is a simple implementation for demo purposes
- * In a real application, this would be more secure
+ * Now validates securely via backend API
  */
-function checkAdminCode(code) {
-    // The secret code is "cerberus123"
-    if (code === 'cerberus123') {
-        localStorage.setItem('cerberus_admin', 'true');
-        showAdminPanel();
+async function checkAdminCode(code) {
+    if (!code) return;
+
+    try {
+        const response = await fetch('/api/verify-admin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code: code })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
+                localStorage.setItem('cerberus_admin', 'true');
+                showAdminPanel();
+            }
+        }
+    } catch (error) {
+        console.error('Error verifying admin code:', error);
     }
 }
 
@@ -219,5 +232,4 @@ function showAdminPanel() {
         adminNavItem.style.display = 'block';
     }
     
-    console.log('Admin access granted');
 }

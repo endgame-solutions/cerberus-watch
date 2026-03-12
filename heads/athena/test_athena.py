@@ -1,8 +1,17 @@
 import pytest
 from fastapi.testclient import TestClient
-from heads.athena.main import app
+from heads.athena.main import app, AthenaAnalyzer, AnalysisInput
 
 client = TestClient(app)
+
+def test_analyze_risk():
+    """
+    Tests the analyze_risk method of AthenaAnalyzer.
+    """
+    analyzer = AthenaAnalyzer(AnalysisInput(name="Test User"))
+    result = analyzer.analyze_risk("Some background info")
+    assert result["safety_score"] == "Review Recommended"
+    assert "This is a placeholder risk analysis" in result["summary"]
 
 def test_analyze_endpoint_no_name():
     """
