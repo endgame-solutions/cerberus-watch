@@ -1,0 +1,4 @@
+## 2024-03-12 - [Reflected XSS in API Responses via innerHTML]
+**Vulnerability:** The frontend code in `heads/athena/athena.html` used `innerHTML` to directly render user-controlled data (`name`, `safety_score`, `summary`) returned by the `/analyze` API. This allows an attacker to execute arbitrary JavaScript if they can manipulate the API response or reflect malicious payload via user inputs.
+**Learning:** Even if data comes from an internal API response, it can be unsafe if that API reflects user input back into the payload without proper sanitization.
+**Prevention:** Never use `innerHTML` to render dynamic data, especially data originating from user inputs or API responses. Use `textContent` or DOM manipulation functions (e.g., `document.createElement`, `node.appendChild`) to ensure the browser treats the input as data rather than executable code.

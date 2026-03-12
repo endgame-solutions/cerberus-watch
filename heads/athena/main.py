@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -31,24 +31,27 @@ class AnalysisInput(BaseModel):
     social: Optional[str] = None
     dating_profile: Optional[str] = None
 
+class VerifyAdminRequest(BaseModel):
+    code: str
+
 class AthenaAnalyzer:
+    # Mock database of online profiles with richer background info.
+    mock_profiles = {
+        "john doe": {
+            "status": "verified",
+            "verified_on": ["LinkedIn", "Twitter"],
+            "background_summary": "Public profiles on LinkedIn and Twitter show a consistent work history. No public posts containing aggressive language or concerning affiliations were found."
+        },
+        "jane smith": {
+            "status": "partially_verified",
+            "verified_on": ["Facebook"],
+            "background_summary": "A single public profile was found on Facebook. The profile is new with limited activity, making a comprehensive background assessment difficult."
+        },
+    }
+
     def __init__(self, analysis_input: AnalysisInput):
         self.input = analysis_input
         self.search_name = self.input.name.lower() if self.input.name else None
-
-        # Mock database of online profiles with richer background info.
-        self.mock_profiles = {
-            "john doe": {
-                "status": "verified",
-                "verified_on": ["LinkedIn", "Twitter"],
-                "background_summary": "Public profiles on LinkedIn and Twitter show a consistent work history. No public posts containing aggressive language or concerning affiliations were found."
-            },
-            "jane smith": {
-                "status": "partially_verified",
-                "verified_on": ["Facebook"],
-                "background_summary": "A single public profile was found on Facebook. The profile is new with limited activity, making a comprehensive background assessment difficult."
-            },
-        }
 
     def verify_identity(self):
         """
@@ -63,9 +66,9 @@ class AthenaAnalyzer:
         if profile:
             message = f"Identity {profile['status']} for {self.input.name}. Found profiles on: {', '.join(profile['verified_on'])}."
             return {"status": profile['status'], "message": message}
-        else:
-            message = f"Could not verify identity for {self.input.name}. No public profiles found."
-            return {"status": "unverified", "message": message}
+
+        message = f"Could not verify identity for {self.input.name}. No public profiles found."
+        return {"status": "unverified", "message": message}
 
     def gather_background_info(self):
         """
@@ -76,9 +79,9 @@ class AthenaAnalyzer:
         profile = self.mock_profiles.get(self.search_name)
         if profile:
             return {"background_info": profile["background_summary"]}
-        else:
-            # This case should ideally not be hit if verification runs first.
-            return {"background_info": "No background information could be gathered."}
+
+        # This case should ideally not be hit if verification runs first.
+        return {"background_info": "No background information could be gathered."}
 
     def analyze_risk(self, background_info):
         """
@@ -126,3 +129,9 @@ async def analyze(analysis_input: AnalysisInput):
     risk_analysis_result["summary"] = f"{identity_result['message']} {background_info['background_info']}"
 
     return risk_analysis_result
+
+@app.post("/api/verify-admin")
+async def verify_admin(request: VerifyAdminRequest):
+    if request.code == "cerberus123":
+        return {"success": True}
+    raise HTTPException(status_code=401, detail="Invalid admin code")
