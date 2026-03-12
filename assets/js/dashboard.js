@@ -39,9 +39,9 @@ function initDashboard() {
 function setupEventListeners() {
     // Mobile sidebar toggle
     const sidebarToggle = document.getElementById('sidebar-toggle');
-    if (sidebarToggle) {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebarToggle && sidebar) {
         sidebarToggle.addEventListener('click', function() {
-            const sidebar = document.querySelector('.sidebar');
             sidebar.classList.toggle('active');
         });
     }
