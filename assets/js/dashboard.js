@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
  * Initialize the dashboard components
  */
 function initDashboard() {
-    console.log('Initializing Cerberus Dashboard...');
     
     // Update stats with random data (for demo purposes)
     updateStats();
@@ -98,7 +97,6 @@ function updateStats() {
         stat.textContent = value;
     });
     
-    console.log('Stats updated');
 }
 
 /**
@@ -234,13 +232,11 @@ function showAdminPanel() {
         adminNavItem.style.display = 'block';
     }
     
-    console.log('Admin access granted');
 }
 
 /**
  * Initialize charts (placeholder for chart implementation)
  */
 function initCharts() {
-    console.log('Charts would be initialized here');
     // In a real implementation, this would create charts using a library like Chart.js
 }
