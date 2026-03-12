@@ -76,9 +76,9 @@ class AthenaAnalyzer:
         profile = self.mock_profiles.get(self.search_name)
         if profile:
             return {"background_info": profile["background_summary"]}
-        else:
-            # This case should ideally not be hit if verification runs first.
-            return {"background_info": "No background information could be gathered."}
+
+        # This case should ideally not be hit if verification runs first.
+        return {"background_info": "No background information could be gathered."}
 
     def analyze_risk(self, background_info):
         """
