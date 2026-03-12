@@ -24,11 +24,6 @@ function initDashboard() {
     // Update stats with random data (for demo purposes)
     updateStats();
     
-    // Initialize charts if they exist
-    if (typeof initCharts === 'function') {
-        initCharts();
-    }
-    
     // Check authentication status
     checkAuthStatus();
 }
@@ -227,10 +222,3 @@ function showAdminPanel() {
     console.log('Admin access granted');
 }
 
-/**
- * Initialize charts (placeholder for chart implementation)
- */
-function initCharts() {
-    console.log('Charts would be initialized here');
-    // In a real implementation, this would create charts using a library like Chart.js
-}
