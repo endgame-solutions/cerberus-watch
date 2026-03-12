@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -30,6 +30,9 @@ class AnalysisInput(BaseModel):
     phone: Optional[str] = None
     social: Optional[str] = None
     dating_profile: Optional[str] = None
+
+class VerifyAdminRequest(BaseModel):
+    code: str
 
 class AthenaAnalyzer:
     def __init__(self, analysis_input: AnalysisInput):
@@ -126,3 +129,9 @@ async def analyze(analysis_input: AnalysisInput):
     risk_analysis_result["summary"] = f"{identity_result['message']} {background_info['background_info']}"
 
     return risk_analysis_result
+
+@app.post("/api/verify-admin")
+async def verify_admin(request: VerifyAdminRequest):
+    if request.code == "cerberus123":
+        return {"success": True}
+    raise HTTPException(status_code=401, detail="Invalid admin code")

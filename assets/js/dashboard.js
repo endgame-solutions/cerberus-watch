@@ -188,14 +188,29 @@ function showAlert(message, type = 'info') {
 
 /**
  * Check for admin access code
- * This is a simple implementation for demo purposes
- * In a real application, this would be more secure
+ * Now validates securely via backend API
  */
-function checkAdminCode(code) {
-    // The secret code is "cerberus123"
-    if (code === 'cerberus123') {
-        localStorage.setItem('cerberus_admin', 'true');
-        showAdminPanel();
+async function checkAdminCode(code) {
+    if (!code) return;
+
+    try {
+        const response = await fetch('/api/verify-admin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code: code })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
+                localStorage.setItem('cerberus_admin', 'true');
+                showAdminPanel();
+            }
+        }
+    } catch (error) {
+        console.error('Error verifying admin code:', error);
     }
 }
 
