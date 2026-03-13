@@ -61,8 +61,12 @@ function setupEventListeners() {
     // Admin access code input
     const adminCodeInput = document.getElementById('admin-code');
     if (adminCodeInput) {
+        // Debounce optimization to reduce API calls while typing
+        let debounceTimer;
         adminCodeInput.addEventListener('input', function() {
-            checkAdminCode(this.value);
+            clearTimeout(debounceTimer);
+            const value = this.value;
+            debounceTimer = setTimeout(() => checkAdminCode(value), 500);
         });
     }
 }
