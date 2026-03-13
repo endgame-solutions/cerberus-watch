@@ -59,11 +59,14 @@ sys.modules['fastapi.responses'] = MockFastAPIResponsesModule('fastapi.responses
 sys.modules['fastapi.middleware.cors'] = MockFastAPICORSModule('fastapi.middleware.cors')
 sys.modules['fastapi.middleware'] = MagicMock()
 
+import os
 import asyncio
 from heads.athena.main import verify_admin, VerifyAdminRequest
 from fastapi import HTTPException
 
 async def run_tests():
+    os.environ["ADMIN_CODE"] = "cerberus123"
+
     # Test valid code
     req = VerifyAdminRequest(code="cerberus123")
     res = await verify_admin(req)

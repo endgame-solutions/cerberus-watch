@@ -4,6 +4,8 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
+import os
+import secrets
 
 app = FastAPI()
 
@@ -132,6 +134,9 @@ async def analyze(analysis_input: AnalysisInput):
 
 @app.post("/api/verify-admin")
 async def verify_admin(request: VerifyAdminRequest):
-    if request.code == "cerberus123":
+    expected_code = os.environ.get("ADMIN_CODE")
+    if not expected_code:
+        raise HTTPException(status_code=500, detail="Server configuration error")
+    if secrets.compare_digest(request.code, expected_code):
         return {"success": True}
     raise HTTPException(status_code=401, detail="Invalid admin code")

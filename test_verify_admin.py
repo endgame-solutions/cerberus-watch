@@ -1,9 +1,12 @@
 import sys
+import os
 from heads.athena.main import app, VerifyAdminRequest, verify_admin
 from fastapi import HTTPException
 import asyncio
 
 async def run_tests():
+    os.environ["ADMIN_CODE"] = "cerberus123"
+
     # Test valid code
     req = VerifyAdminRequest(code="cerberus123")
     res = await verify_admin(req)
