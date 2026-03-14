@@ -205,9 +205,7 @@
         // Inactivity timer for secure sessions
         let inactivityTime = function () {
             let time;
-            window.onload = resetTimer;
-            document.onmousemove = resetTimer;
-            document.onkeypress = resetTimer;
+            let lastUpdate = 0;
 
             function logout() {
                 alert("For your safety, this session has ended due to inactivity.");
@@ -215,9 +213,20 @@
             }
 
             function resetTimer() {
-                clearTimeout(time);
-                time = setTimeout(logout, 300000);  // 5 minutes
+                // ⚡ Bolt: Throttle timer resets to max once per second to improve performance
+                // by avoiding excessive clearTimeout/setTimeout calls on mousemove
+                const now = Date.now();
+                if (now - lastUpdate > 1000) {
+                    clearTimeout(time);
+                    time = setTimeout(logout, 300000);  // 5 minutes
+                    lastUpdate = now;
+                }
             }
+
+            window.onload = resetTimer;
+            document.onmousemove = resetTimer;
+            document.onkeypress = resetTimer;
+            document.ontouchstart = resetTimer; // Good practice for mobile
         };
 
         inactivityTime();
