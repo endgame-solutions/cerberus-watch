@@ -19,9 +19,14 @@ class MockFastAPIModule(types.ModuleType):
                 def decorator(func):
                     return func
                 return decorator
+            def middleware(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
             def add_middleware(self, *args, **kwargs):
                 pass
         self.FastAPI = FastAPI
+        self.Request = MagicMock()
         class HTTPException(Exception):
             def __init__(self, status_code, detail):
                 self.status_code = status_code
