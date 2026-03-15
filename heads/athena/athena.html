@@ -47,12 +47,22 @@
         .button:hover {
             background-color: #c1a884;
         }
+        .button:focus-visible {
+            outline: 2px solid #3b3b3b;
+            outline-offset: 2px;
+            background-color: #c1a884;
+        }
         .quick-exit {
             position: absolute;
             top: 20px;
             right: 20px;
             background-color: #9c4f4f;
             color: white;
+        }
+        .quick-exit:focus-visible {
+            outline: 2px solid #3b3b3b;
+            outline-offset: 2px;
+            background-color: #9c4f4f;
         }
         .form-group {
             margin-bottom: 20px;
@@ -69,6 +79,10 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+        }
+        input[type="text"]:focus-visible {
+            outline: 2px solid #3b3b3b;
+            border-color: #3b3b3b;
         }
         .transparency-statement {
             font-size: 14px;
