@@ -170,6 +170,7 @@ function showAlert(message, type = 'info') {
     const closeBtn = document.createElement('button');
     closeBtn.className = 'close';
     closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Close alert');
     closeBtn.addEventListener('click', function() {
         alert.remove();
     });
