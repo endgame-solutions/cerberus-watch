@@ -206,7 +206,21 @@
         let inactivityTime = function () {
             let time;
             window.onload = resetTimer;
-            document.onmousemove = resetTimer;
+
+            // ⚡ Bolt Performance Optimization:
+            // Throttle mousemove event to fire at most once per second
+            // This prevents main thread blocking and excessive setTimeout/clearTimeout calls
+            // that occur when tracking every single mouse movement pixel by pixel
+            let throttleTimer;
+            document.onmousemove = function() {
+                if (!throttleTimer) {
+                    throttleTimer = setTimeout(() => {
+                        throttleTimer = null;
+                        resetTimer();
+                    }, 1000);
+                }
+            };
+
             document.onkeypress = resetTimer;
 
             function logout() {
