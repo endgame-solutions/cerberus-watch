@@ -10,10 +10,21 @@ import secrets
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="heads/athena"), name="static")
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 @app.get("/")
 async def read_index():
     return FileResponse('heads/athena/athena.html')
+
+@app.get("/login")
+@app.get("/login.html")
+async def read_login():
+    return FileResponse('login.html')
+
+@app.get("/dashboard")
+@app.get("/index.html")
+async def read_dashboard():
+    return FileResponse('index.html')
 
 origins = [
     "http://127.0.0.1:8000",
@@ -40,6 +51,10 @@ class AnalysisInput(BaseModel):
     phone: Optional[str] = None
     social: Optional[str] = None
     dating_profile: Optional[str] = None
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 
 class VerifyAdminRequest(BaseModel):
     code: str
@@ -139,6 +154,15 @@ async def analyze(analysis_input: AnalysisInput):
     risk_analysis_result["summary"] = f"{identity_result['message']} {background_info['background_info']}"
 
     return risk_analysis_result
+
+@app.post("/api/login")
+async def login(request: LoginRequest):
+    expected_code = os.environ.get("ADMIN_CODE")
+    if not expected_code:
+        raise HTTPException(status_code=500, detail="Server configuration error")
+    if secrets.compare_digest(request.password, expected_code):
+        return {"success": True}
+    raise HTTPException(status_code=401, detail="Invalid credentials")
 
 @app.post("/api/verify-admin")
 async def verify_admin(request: VerifyAdminRequest):
