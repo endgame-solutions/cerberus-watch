@@ -124,7 +124,7 @@ function checkAuthStatus() {
 /**
  * Handle login form submission
  */
-function handleLogin() {
+async function handleLogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     
@@ -134,13 +134,29 @@ function handleLogin() {
         return;
     }
     
-    // In a real implementation, this would make an API call
-    // For demo purposes, accept any non-empty credentials
-    localStorage.setItem('cerberus_authenticated', 'true');
-    localStorage.setItem('cerberus_username', username);
-    
-    // Redirect to dashboard
-    window.location.href = 'index.html';
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: username, password: password })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
+                localStorage.setItem('cerberus_authenticated', 'true');
+                localStorage.setItem('cerberus_username', username);
+                window.location.href = 'index.html';
+            }
+        } else {
+            showAlert('Invalid credentials', 'danger');
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        showAlert('An error occurred during login. Please try again.', 'danger');
+    }
 }
 
 /**

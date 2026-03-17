@@ -11,3 +11,8 @@
 **Vulnerability:** The FastAPI application lacked standard security headers like `X-Content-Type-Options`, `X-Frame-Options`, and `Strict-Transport-Security`.
 **Learning:** This repo lacked a global middleware to enforce these security headers which opens it up to Clickjacking, MIME type sniffing, and potential downgrade attacks. The security convention in memory actually specified that this middleware *should* exist, meaning it was a gap.
 **Prevention:** Ensure standard HTTP security headers are enforced globally via middleware in FastAPI apps.
+
+## 2025-03-17 - [Frontend-Only Authentication Bypass]
+**Vulnerability:** The login form in `assets/js/dashboard.js` verified credentials purely on the frontend (accepting any non-empty input) and then granted access to the dashboard by setting a `localStorage` flag. This is a critical security bypass as anyone could log in without valid credentials.
+**Learning:** Frontend authentication checks are fundamentally insecure because the client environment can be manipulated by the user. "Demo purposes" implementations that bypass security can easily leak into production.
+**Prevention:** All authentication logic must be enforced on the backend. The frontend should capture credentials, send them to a secure API endpoint (e.g., `/api/login`), and only grant access or redirect upon receiving a successful response from the server.
