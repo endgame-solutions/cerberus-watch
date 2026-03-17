@@ -5,3 +5,7 @@
 ## 2024-03-14 - Throttling inactivityTimer on mousemove
 **Learning:** Attaching an unthrottled `resetTimer` function (which invokes `clearTimeout` and `setTimeout`) directly to `document.onmousemove` can cause significant performance degradation due to rapid, successive calls and garbage collection when the user moves the mouse.
 **Action:** Always throttle or debounce event listeners for high-frequency events like `mousemove`, `scroll`, or `resize` to reduce unnecessary CPU overhead and prevent main thread blocking.
+
+## 2024-05-25 - Defer non-critical third-party scripts to unblock First Contentful Paint
+**Learning:** Loading third-party tracking or auxiliary scripts synchronously in the `<head>` blocks DOM parsing and delays First Contentful Paint, causing significant front-end performance degradation on page load.
+**Action:** Always add the `defer` (or `async`) attribute to `<script>` tags when loading third-party or non-critical scripts in the `<head>` to prevent blocking DOM parsing and First Contentful Paint.
