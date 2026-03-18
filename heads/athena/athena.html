@@ -144,7 +144,16 @@
             document.getElementById('not-safe-resources').classList.add('hidden');
             document.getElementById('intake-form-screen').classList.add('hidden');
             document.getElementById('results-screen').classList.add('hidden');
-            document.getElementById(screenId).classList.remove('hidden');
+
+            const nextScreen = document.getElementById(screenId);
+            nextScreen.classList.remove('hidden');
+
+            // Move focus to the heading of the new screen for screen readers
+            const heading = nextScreen.querySelector('h1');
+            if (heading) {
+                heading.setAttribute('tabindex', '-1');
+                heading.focus();
+            }
         }
 
         function showIntakeForm() {
