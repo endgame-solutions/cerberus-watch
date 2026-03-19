@@ -112,23 +112,25 @@
     <div id="intake-form-screen" class="container hidden">
         <h1>Tell me about the person you're meeting.</h1>
         <p class="transparency-statement">You're in control. We don’t save or share what you tell us. Every field is optional.</p>
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name">
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="text" id="phone" name="phone">
-        </div>
-        <div class="form-group">
-            <label for="social">Social Media Link</label>
-            <input type="text" id="social" name="social">
-        </div>
-        <div class="form-group">
-            <label for="dating-profile">Dating Profile Link</label>
-            <input type="text" id="dating-profile" name="dating-profile">
-        </div>
-        <button class="button" onclick="submitAnalysis()">Analyze</button>
+        <form onsubmit="event.preventDefault(); submitAnalysis();">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="social">Social Media Link</label>
+                <input type="text" id="social" name="social">
+            </div>
+            <div class="form-group">
+                <label for="dating-profile">Dating Profile Link</label>
+                <input type="text" id="dating-profile" name="dating-profile">
+            </div>
+            <button class="button" type="submit">Analyze</button>
+        </form>
     </div>
 
     <div id="results-screen" class="container hidden">
