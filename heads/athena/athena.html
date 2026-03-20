@@ -30,6 +30,9 @@
             font-weight: 300;
             margin-bottom: 30px;
         }
+        h1:focus {
+            outline: none;
+        }
         .button {
             background-color: #d1b894; /* Soft Amber */
             color: #ffffff;
@@ -144,7 +147,16 @@
             document.getElementById('not-safe-resources').classList.add('hidden');
             document.getElementById('intake-form-screen').classList.add('hidden');
             document.getElementById('results-screen').classList.add('hidden');
-            document.getElementById(screenId).classList.remove('hidden');
+
+            const newScreen = document.getElementById(screenId);
+            newScreen.classList.remove('hidden');
+
+            // Explicitly manage focus for accessibility
+            const heading = newScreen.querySelector('h1');
+            if (heading) {
+                heading.setAttribute('tabindex', '-1');
+                heading.focus();
+            }
         }
 
         function showIntakeForm() {
