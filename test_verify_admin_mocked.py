@@ -15,6 +15,12 @@ class MockFastAPIModule(types.ModuleType):
                 def decorator(func):
                     return func
                 return decorator
+            def middleware(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
+            def add_middleware(self, *args, **kwargs):
+                pass
             def post(self, *args, **kwargs):
                 def decorator(func):
                     return func
@@ -27,6 +33,7 @@ class MockFastAPIModule(types.ModuleType):
                 self.status_code = status_code
                 self.detail = detail
         self.HTTPException = HTTPException
+        self.Request = MagicMock()
 
 class MockPydanticModule(types.ModuleType):
     def __init__(self, name):
