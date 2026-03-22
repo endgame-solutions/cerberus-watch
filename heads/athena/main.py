@@ -111,7 +111,9 @@ class AthenaAnalyzer:
         }
 
 @app.post("/analyze")
-async def analyze(analysis_input: AnalysisInput):
+# ⚡ Bolt: Removed `async` from `def analyze` to run the blocking, synchronous mock processing in a thread pool.
+# Impact: Prevents blocking the main asyncio event loop, dramatically improving throughput for concurrent requests.
+def analyze(analysis_input: AnalysisInput):
     """
     Runs the full safety analysis pipeline.
 
@@ -141,7 +143,9 @@ async def analyze(analysis_input: AnalysisInput):
     return risk_analysis_result
 
 @app.post("/api/verify-admin")
-async def verify_admin(request: VerifyAdminRequest):
+# ⚡ Bolt: Removed `async` from `def verify_admin` to execute synchronous blocking checks in a thread pool.
+# Impact: Prevents event loop blocking during digest comparison, improving concurrent request handling.
+def verify_admin(request: VerifyAdminRequest):
     expected_code = os.environ.get("ADMIN_CODE")
     if not expected_code:
         raise HTTPException(status_code=500, detail="Server configuration error")
