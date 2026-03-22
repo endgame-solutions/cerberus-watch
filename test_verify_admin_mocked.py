@@ -21,12 +21,19 @@ class MockFastAPIModule(types.ModuleType):
                 return decorator
             def add_middleware(self, *args, **kwargs):
                 pass
+            def middleware(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
         self.FastAPI = FastAPI
         class HTTPException(Exception):
             def __init__(self, status_code, detail):
                 self.status_code = status_code
                 self.detail = detail
         self.HTTPException = HTTPException
+        class Request:
+            pass
+        self.Request = Request
 
 class MockPydanticModule(types.ModuleType):
     def __init__(self, name):
@@ -36,6 +43,9 @@ class MockPydanticModule(types.ModuleType):
                 for k, v in kwargs.items():
                     setattr(self, k, v)
         self.BaseModel = BaseModel
+        def Field(*args, **kwargs):
+            return kwargs.get('default', None)
+        self.Field = Field
 
 class MockFastAPIStaticFilesModule(types.ModuleType):
     def __init__(self, name):
@@ -58,6 +68,7 @@ sys.modules['fastapi.staticfiles'] = MockFastAPIStaticFilesModule('fastapi.stati
 sys.modules['fastapi.responses'] = MockFastAPIResponsesModule('fastapi.responses')
 sys.modules['fastapi.middleware.cors'] = MockFastAPICORSModule('fastapi.middleware.cors')
 sys.modules['fastapi.middleware'] = MagicMock()
+sys.modules['fastapi.testclient'] = MagicMock()
 
 import os
 import asyncio
