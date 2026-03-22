@@ -136,11 +136,22 @@ function handleLogin() {
     
     // In a real implementation, this would make an API call
     // For demo purposes, accept any non-empty credentials
-    localStorage.setItem('cerberus_authenticated', 'true');
-    localStorage.setItem('cerberus_username', username);
     
-    // Redirect to dashboard
-    window.location.href = 'index.html';
+    // Provide visual feedback for the login action
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) {
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Logging in...';
+    }
+
+    // Use timeout to make the loading state visible before redirect
+    setTimeout(() => {
+        localStorage.setItem('cerberus_authenticated', 'true');
+        localStorage.setItem('cerberus_username', username);
+
+        // Redirect to dashboard
+        window.location.href = 'index.html';
+    }, 500);
 }
 
 /**
