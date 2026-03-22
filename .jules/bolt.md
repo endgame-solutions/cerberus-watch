@@ -5,3 +5,7 @@
 ## 2024-03-14 - Throttling inactivityTimer on mousemove
 **Learning:** Attaching an unthrottled `resetTimer` function (which invokes `clearTimeout` and `setTimeout`) directly to `document.onmousemove` can cause significant performance degradation due to rapid, successive calls and garbage collection when the user moves the mouse.
 **Action:** Always throttle or debounce event listeners for high-frequency events like `mousemove`, `scroll`, or `resize` to reduce unnecessary CPU overhead and prevent main thread blocking.
+
+## 2024-05-24 - Async def for synchronous endpoints in FastAPI
+**Learning:** Defining a FastAPI endpoint with `async def` when its body contains only synchronous, blocking operations prevents FastAPI from offloading the work to a thread pool. This blocks the main asyncio event loop, causing severe performance degradation for concurrent requests.
+**Action:** Always define endpoints as standard `def` functions instead of `async def` if they do not contain `await` calls and perform synchronous operations.
