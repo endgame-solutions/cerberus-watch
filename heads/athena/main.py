@@ -12,7 +12,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="heads/athena"), name="static")
 
 @app.get("/")
-async def read_index():
+def read_index():
     return FileResponse('heads/athena/athena.html')
 
 origins = [
@@ -111,7 +111,7 @@ class AthenaAnalyzer:
         }
 
 @app.post("/analyze")
-async def analyze(analysis_input: AnalysisInput):
+def analyze(analysis_input: AnalysisInput):
     """
     Runs the full safety analysis pipeline.
 
@@ -141,7 +141,7 @@ async def analyze(analysis_input: AnalysisInput):
     return risk_analysis_result
 
 @app.post("/api/verify-admin")
-async def verify_admin(request: VerifyAdminRequest):
+def verify_admin(request: VerifyAdminRequest):
     expected_code = os.environ.get("ADMIN_CODE")
     if not expected_code:
         raise HTTPException(status_code=500, detail="Server configuration error")
