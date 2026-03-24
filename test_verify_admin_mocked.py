@@ -21,12 +21,17 @@ class MockFastAPIModule(types.ModuleType):
                 return decorator
             def add_middleware(self, *args, **kwargs):
                 pass
+            def middleware(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
         self.FastAPI = FastAPI
         class HTTPException(Exception):
             def __init__(self, status_code, detail):
                 self.status_code = status_code
                 self.detail = detail
         self.HTTPException = HTTPException
+        self.Request = MagicMock()
 
 class MockPydanticModule(types.ModuleType):
     def __init__(self, name):
@@ -69,14 +74,14 @@ async def run_tests():
 
     # Test valid code
     req = VerifyAdminRequest(code="cerberus123")
-    res = await verify_admin(req)
+    res = verify_admin(req)
     assert res == {"success": True}
     print("Test valid code passed")
 
     # Test invalid code
     req = VerifyAdminRequest(code="wrong")
     try:
-        await verify_admin(req)
+        verify_admin(req)
         assert False, "Should have raised HTTPException"
     except HTTPException as e:
         assert e.status_code == 401
