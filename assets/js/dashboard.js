@@ -139,8 +139,17 @@ function handleLogin() {
     localStorage.setItem('cerberus_authenticated', 'true');
     localStorage.setItem('cerberus_username', username);
     
-    // Redirect to dashboard
-    window.location.href = 'index.html';
+    // Provide visual feedback for login action
+    const submitBtn = document.querySelector('#login-form button[type="submit"]');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Logging in...';
+    }
+
+    // Redirect to dashboard with a slight delay so feedback is visible
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 400);
 }
 
 /**
