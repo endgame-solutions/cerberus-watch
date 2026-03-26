@@ -11,3 +11,8 @@
 **Vulnerability:** The FastAPI application lacked standard security headers like `X-Content-Type-Options`, `X-Frame-Options`, and `Strict-Transport-Security`.
 **Learning:** This repo lacked a global middleware to enforce these security headers which opens it up to Clickjacking, MIME type sniffing, and potential downgrade attacks. The security convention in memory actually specified that this middleware *should* exist, meaning it was a gap.
 **Prevention:** Ensure standard HTTP security headers are enforced globally via middleware in FastAPI apps.
+
+## 2024-05-25 - Unbounded Pydantic String Fields & Resource Exhaustion DoS
+**Vulnerability:** The FastAPI models `AnalysisInput` and `VerifyAdminRequest` in `heads/athena/main.py` used `str` fields without `max_length` restrictions. This allows an attacker to send an arbitrarily large string payload (e.g., gigabytes in size), forcing the server to load it into memory, causing resource exhaustion and Denial of Service (DoS).
+**Learning:** Pydantic models in FastAPI automatically parse incoming payloads into memory. Without explicit length constraints, the backend is vulnerable to processing massive strings which will exhaust server memory and crash the application.
+**Prevention:** Always use `pydantic.Field` to set `max_length` limits on string inputs for external APIs to prevent unbounded payload processing.
