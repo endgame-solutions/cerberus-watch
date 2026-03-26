@@ -12,6 +12,9 @@ class MockPydanticModule(types.ModuleType):
     def __init__(self, name):
         super().__init__(name)
         self.BaseModel = MagicMock()
+        def mock_field(**kwargs):
+            return kwargs.get('default', None)
+        self.Field = mock_field
 
 class MockFastAPIStaticFilesModule(types.ModuleType):
     def __init__(self, name):
