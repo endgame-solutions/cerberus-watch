@@ -21,12 +21,19 @@ class MockFastAPIModule(types.ModuleType):
                 return decorator
             def add_middleware(self, *args, **kwargs):
                 pass
+            def middleware(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
         self.FastAPI = FastAPI
         class HTTPException(Exception):
             def __init__(self, status_code, detail):
                 self.status_code = status_code
                 self.detail = detail
         self.HTTPException = HTTPException
+        class Request:
+            pass
+        self.Request = Request
 
 class MockPydanticModule(types.ModuleType):
     def __init__(self, name):
