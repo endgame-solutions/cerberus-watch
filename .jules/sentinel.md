@@ -11,3 +11,8 @@
 **Vulnerability:** The FastAPI application lacked standard security headers like `X-Content-Type-Options`, `X-Frame-Options`, and `Strict-Transport-Security`.
 **Learning:** This repo lacked a global middleware to enforce these security headers which opens it up to Clickjacking, MIME type sniffing, and potential downgrade attacks. The security convention in memory actually specified that this middleware *should* exist, meaning it was a gap.
 **Prevention:** Ensure standard HTTP security headers are enforced globally via middleware in FastAPI apps.
+
+## 2024-05-24 - Unbounded Input Length (DoS Risk)
+**Vulnerability:** The FastAPI application used unbounded string inputs in the `AnalysisInput` Pydantic model (`name`, `phone`, `social`, `dating_profile`).
+**Learning:** Without max length limits, an attacker could send extremely large string payloads, causing the server to consume excessive memory or CPU when parsing the JSON request, leading to a Denial of Service (DoS) attack.
+**Prevention:** Always enforce input length limits using `pydantic.Field(max_length=X)` on string fields in API request models to prevent resource exhaustion from oversized payloads.
