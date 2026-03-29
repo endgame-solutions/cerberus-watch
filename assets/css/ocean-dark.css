@@ -164,7 +164,7 @@ a:hover {
   border-color: var(--ocean-accent-secondary);
 }
 
-.btn-primary:hover {
+.btn-primary:not(:disabled):hover {
   background: var(--ocean-accent-primary);
   transform: translateY(-2px);
   box-shadow: var(--ocean-shadow-md);
@@ -176,7 +176,7 @@ a:hover {
   border-color: var(--ocean-border);
 }
 
-.btn-secondary:hover {
+.btn-secondary:not(:disabled):hover {
   background-color: var(--ocean-bg-medium);
   transform: translateY(-2px);
 }
@@ -186,9 +186,16 @@ a:hover {
   color: var(--ocean-text-primary);
 }
 
-.btn-danger:hover {
+.btn-danger:not(:disabled):hover {
   background-color: #ff1744;
   transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-sm {
@@ -228,6 +235,12 @@ a:hover {
 .navbar-brand img {
   height: 32px;
   margin-right: 0.75rem;
+}
+
+/* Keyboard Accessibility Focus State */
+a:focus-visible, button:focus-visible, .btn:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--ocean-accent-primary);
+  outline-offset: 2px;
 }
 
 .navbar-nav {
