@@ -1,7 +1,3 @@
-## 2025-03-13 - [Missing form associations and ARIA labels]
-**Learning:** Found an accessibility issue pattern where inputs in the admin panel lack corresponding `for` and `id` associations with labels, and a disguised search input missing an `aria-label`. This hinders screen reader accessibility.
-**Action:** Always add `for` and `id` attributes to link labels and inputs, and use `aria-label` for disguised or icon-only inputs.
-
-## 2025-03-14 - [Missing keyboard focus indicators]
-**Learning:** Found a pattern where standalone HTML heads (like Athena) using custom interactive elements lack default keyboard `:focus-visible` styles, hindering navigation for users relying on keyboards or assistive tech.
-**Action:** Always verify keyboard accessibility (`Tab` navigation) and explicitly define `:focus-visible` styles for interactive elements in custom CSS files.
+## 2025-03-29 - [Added visual feedback for login submission and focus styles for keyboard navigation]
+**Learning:** Found that the primary login form lacked visual feedback upon submission, creating a potential for double-clicks, and the custom CSS lacked a `:focus-visible` outline for interactive elements, hindering keyboard navigation accessibility.
+**Action:** Always provide immediate visual feedback (e.g., loading spinner and disabled state) for primary form submissions even for fast local redirects to make the action feel intentional, and consistently include `:focus-visible` styles with sufficient contrast for links, buttons, and inputs.

@@ -134,13 +134,21 @@ function handleLogin() {
         return;
     }
     
+    // Set loading state on submit button
+    const submitBtn = document.querySelector('#login-form button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Authenticating...';
+
     // In a real implementation, this would make an API call
     // For demo purposes, accept any non-empty credentials
     localStorage.setItem('cerberus_authenticated', 'true');
     localStorage.setItem('cerberus_username', username);
     
-    // Redirect to dashboard
-    window.location.href = 'index.html';
+    // Add an artificial delay for UX feedback so it feels intentional
+    setTimeout(() => {
+        // Redirect to dashboard
+        window.location.href = 'index.html';
+    }, 500);
 }
 
 /**
