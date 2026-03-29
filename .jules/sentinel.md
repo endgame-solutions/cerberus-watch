@@ -11,3 +11,8 @@
 **Vulnerability:** The FastAPI application lacked standard security headers like `X-Content-Type-Options`, `X-Frame-Options`, and `Strict-Transport-Security`.
 **Learning:** This repo lacked a global middleware to enforce these security headers which opens it up to Clickjacking, MIME type sniffing, and potential downgrade attacks. The security convention in memory actually specified that this middleware *should* exist, meaning it was a gap.
 **Prevention:** Ensure standard HTTP security headers are enforced globally via middleware in FastAPI apps.
+
+## 2024-05-24 - [Missing Input Validation in FastAPI Models]
+**Vulnerability:** The Pydantic model `AnalysisInput` in `heads/athena/main.py` did not enforce `max_length` limits on user-provided string fields (`name`, `phone`, `social`, `dating_profile`). This exposed the application to Denial of Service (DoS) attacks and resource exhaustion from excessively large payloads.
+**Learning:** Pydantic models in FastAPI accept strings of unlimited length by default unless specifically constrained. Unbounded string inputs can be exploited to consume memory or CPU resources, especially if the data is subsequently processed by expensive operations (like regex or LLM analysis).
+**Prevention:** Use `pydantic.Field` with an explicit `max_length` constraint for all user-provided string inputs in Pydantic models. Establish reasonable length limits based on the expected data size.
