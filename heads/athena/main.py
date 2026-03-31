@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import os
@@ -33,16 +33,17 @@ async def add_security_headers(request: Request, call_next):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    response.headers["Content-Security-Policy"] = "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
     return response
 
 class AnalysisInput(BaseModel):
-    name: Optional[str] = None
-    phone: Optional[str] = None
-    social: Optional[str] = None
-    dating_profile: Optional[str] = None
+    name: Optional[str] = Field(None, max_length=200)
+    phone: Optional[str] = Field(None, max_length=200)
+    social: Optional[str] = Field(None, max_length=200)
+    dating_profile: Optional[str] = Field(None, max_length=200)
 
 class VerifyAdminRequest(BaseModel):
-    code: str
+    code: str = Field(..., max_length=200)
 
 class AthenaAnalyzer:
     # Mock database of online profiles with richer background info.
