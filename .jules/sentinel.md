@@ -11,3 +11,7 @@
 **Vulnerability:** The FastAPI application lacked standard security headers like `X-Content-Type-Options`, `X-Frame-Options`, and `Strict-Transport-Security`.
 **Learning:** This repo lacked a global middleware to enforce these security headers which opens it up to Clickjacking, MIME type sniffing, and potential downgrade attacks. The security convention in memory actually specified that this middleware *should* exist, meaning it was a gap.
 **Prevention:** Ensure standard HTTP security headers are enforced globally via middleware in FastAPI apps.
+## 2025-03-31 - [Added Input Bounds and CSP Security Header]
+**Vulnerability:** The application was missing maximum length constraints on Pydantic string fields, increasing susceptibility to Denial of Service (DoS) attacks through large payloads. Furthermore, the Content-Security-Policy (CSP) header was missing from the security headers middleware, leaving the application open to certain injections.
+**Learning:** Even internal or fast operations should have explicit data bounds to enforce the principle of data ephemerality securely. The absence of strict CSP headers in FastAPI apps that serve HTML indicates a significant architectural gap in standard security posture.
+**Prevention:** Always use `pydantic.Field(..., max_length=X)` for string inputs. Ensure strict security headers, specifically CSP, are explicitly configured in all frontend-serving FastAPI endpoints.
