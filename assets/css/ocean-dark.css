@@ -158,13 +158,24 @@ a:hover {
   cursor: pointer;
 }
 
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn:focus-visible, a:focus-visible {
+  outline: 2px solid var(--ocean-accent-primary);
+  outline-offset: 2px;
+}
+
 .btn-primary {
   background: var(--ocean-gradient-primary);
   color: var(--ocean-text-primary);
   border-color: var(--ocean-accent-secondary);
 }
 
-.btn-primary:hover {
+.btn-primary:not(:disabled):hover {
   background: var(--ocean-accent-primary);
   transform: translateY(-2px);
   box-shadow: var(--ocean-shadow-md);
@@ -176,7 +187,7 @@ a:hover {
   border-color: var(--ocean-border);
 }
 
-.btn-secondary:hover {
+.btn-secondary:not(:disabled):hover {
   background-color: var(--ocean-bg-medium);
   transform: translateY(-2px);
 }
@@ -186,7 +197,7 @@ a:hover {
   color: var(--ocean-text-primary);
 }
 
-.btn-danger:hover {
+.btn-danger:not(:disabled):hover {
   background-color: #ff1744;
   transform: translateY(-2px);
 }
