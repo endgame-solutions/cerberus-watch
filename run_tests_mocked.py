@@ -7,6 +7,9 @@ class MockFastAPIModule(types.ModuleType):
         super().__init__(name)
         self.FastAPI = MagicMock()
         self.HTTPException = MagicMock()
+        class Request:
+            pass
+        self.Request = Request
 
 class MockPydanticModule(types.ModuleType):
     def __init__(self, name):
