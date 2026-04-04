@@ -133,14 +133,30 @@ function handleLogin() {
         showAlert('Please enter both username and password', 'danger');
         return;
     }
+
+    // UX: Add visual feedback for form submission
+    const loginForm = document.getElementById('login-form');
+    let submitBtn = null;
+    let originalBtnContent = '';
+
+    if (loginForm) {
+        submitBtn = loginForm.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            originalBtnContent = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Logging in...';
+        }
+    }
     
     // In a real implementation, this would make an API call
     // For demo purposes, accept any non-empty credentials
     localStorage.setItem('cerberus_authenticated', 'true');
     localStorage.setItem('cerberus_username', username);
     
-    // Redirect to dashboard
-    window.location.href = 'index.html';
+    // Add artificial delay for visual feedback before redirect
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 500);
 }
 
 /**
