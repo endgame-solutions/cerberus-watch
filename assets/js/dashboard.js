@@ -127,6 +127,7 @@ function checkAuthStatus() {
 function handleLogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    const submitBtn = document.querySelector('#login-form button[type="submit"]');
     
     // Simple validation
     if (!username || !password) {
@@ -134,13 +135,22 @@ function handleLogin() {
         return;
     }
     
+    // Disable button and show loading state
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Logging in...';
+    }
+
     // In a real implementation, this would make an API call
     // For demo purposes, accept any non-empty credentials
-    localStorage.setItem('cerberus_authenticated', 'true');
-    localStorage.setItem('cerberus_username', username);
-    
-    // Redirect to dashboard
-    window.location.href = 'index.html';
+    // Add artificial delay to show loading state
+    setTimeout(function() {
+        localStorage.setItem('cerberus_authenticated', 'true');
+        localStorage.setItem('cerberus_username', username);
+
+        // Redirect to dashboard
+        window.location.href = 'index.html';
+    }, 800);
 }
 
 /**
