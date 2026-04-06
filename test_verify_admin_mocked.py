@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 class MockFastAPIModule(types.ModuleType):
     def __init__(self, name):
         super().__init__(name)
+        self.Request = MagicMock()
         class FastAPI:
             def __init__(self, *args, **kwargs):
                 self.args = args
@@ -21,6 +22,10 @@ class MockFastAPIModule(types.ModuleType):
                 return decorator
             def add_middleware(self, *args, **kwargs):
                 pass
+            def middleware(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
         self.FastAPI = FastAPI
         class HTTPException(Exception):
             def __init__(self, status_code, detail):
@@ -36,6 +41,9 @@ class MockPydanticModule(types.ModuleType):
                 for k, v in kwargs.items():
                     setattr(self, k, v)
         self.BaseModel = BaseModel
+        def Field(**kwargs):
+            return kwargs.get('default', None)
+        self.Field = Field
 
 class MockFastAPIStaticFilesModule(types.ModuleType):
     def __init__(self, name):
