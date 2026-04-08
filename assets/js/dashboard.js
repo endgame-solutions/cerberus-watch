@@ -127,6 +127,7 @@ function checkAuthStatus() {
 function handleLogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    const submitBtn = document.querySelector('#login-form button[type="submit"]');
     
     // Simple validation
     if (!username || !password) {
@@ -134,6 +135,11 @@ function handleLogin() {
         return;
     }
     
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Logging in...';
+    }
+
     // In a real implementation, this would make an API call
     // For demo purposes, accept any non-empty credentials
     localStorage.setItem('cerberus_authenticated', 'true');
