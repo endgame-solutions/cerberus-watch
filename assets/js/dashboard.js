@@ -80,8 +80,9 @@ function updateStats() {
     const statValues = document.querySelectorAll('.stat-value');
     
     // Update each stat with a random value
-    statValues.forEach(function(stat) {
-        const dataType = stat.getAttribute('data-type');
+    // ⚡ Bolt: Convert NodeList to Array for faster iteration and use dataset for attribute access
+    Array.from(statValues).forEach(function(stat) {
+        const dataType = stat.dataset.type;
         let value;
         
         switch (dataType) {
