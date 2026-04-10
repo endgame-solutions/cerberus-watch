@@ -5,8 +5,33 @@ from unittest.mock import MagicMock
 class MockFastAPIModule(types.ModuleType):
     def __init__(self, name):
         super().__init__(name)
-        self.FastAPI = MagicMock()
-        self.HTTPException = MagicMock()
+        class FastAPI:
+            def __init__(self, *args, **kwargs):
+                self.args = args
+                self.kwargs = kwargs
+            def mount(self, *args, **kwargs):
+                pass
+            def get(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
+            def post(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
+            def add_middleware(self, *args, **kwargs):
+                pass
+            def middleware(self, *args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
+        self.FastAPI = FastAPI
+        class HTTPException(Exception):
+            def __init__(self, status_code, detail):
+                self.status_code = status_code
+                self.detail = detail
+        self.HTTPException = HTTPException
+        self.Request = MagicMock()
 
 class MockPydanticModule(types.ModuleType):
     def __init__(self, name):

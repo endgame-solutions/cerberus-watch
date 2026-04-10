@@ -134,13 +134,23 @@ function handleLogin() {
         return;
     }
     
+    // Visual feedback for login
+    const loginForm = document.getElementById('login-form');
+    const submitBtn = loginForm.querySelector('button[type="submit"]');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Logging in...';
+    }
+
     // In a real implementation, this would make an API call
     // For demo purposes, accept any non-empty credentials
     localStorage.setItem('cerberus_authenticated', 'true');
     localStorage.setItem('cerberus_username', username);
     
-    // Redirect to dashboard
-    window.location.href = 'index.html';
+    // Redirect to dashboard with a short delay to allow visual feedback
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 500);
 }
 
 /**
