@@ -162,7 +162,8 @@
         function enableSilentMode() {
             document.body.style.backgroundColor = '#ffffff';
             const allText = document.querySelectorAll('h1, p, label, .button');
-            allText.forEach(el => el.style.color = '#000000');
+            // ⚡ Bolt: Convert NodeList to Array for faster iteration
+            Array.from(allText).forEach(el => el.style.color = '#000000');
             // Further masking logic would go here
             alert("Silent Mode enabled. The app will now appear as a generic note-taking app.");
         }
