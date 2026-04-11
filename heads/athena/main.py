@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import os
@@ -36,13 +36,13 @@ async def add_security_headers(request: Request, call_next):
     return response
 
 class AnalysisInput(BaseModel):
-    name: Optional[str] = None
-    phone: Optional[str] = None
-    social: Optional[str] = None
-    dating_profile: Optional[str] = None
+    name: Optional[str] = Field(default=None, max_length=100)
+    phone: Optional[str] = Field(default=None, max_length=50)
+    social: Optional[str] = Field(default=None, max_length=2000)
+    dating_profile: Optional[str] = Field(default=None, max_length=2000)
 
 class VerifyAdminRequest(BaseModel):
-    code: str
+    code: str = Field(max_length=100)
 
 class AthenaAnalyzer:
     # Mock database of online profiles with richer background info.
