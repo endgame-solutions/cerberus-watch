@@ -78,14 +78,14 @@ async def run_tests():
 
     # Test valid code
     req = VerifyAdminRequest(code="cerberus123")
-    res = await verify_admin(req)
+    res = verify_admin(req)
     assert res == {"success": True}
     print("Test valid code passed")
 
     # Test invalid code
     req = VerifyAdminRequest(code="wrong")
     try:
-        await verify_admin(req)
+        verify_admin(req)
         assert False, "Should have raised HTTPException"
     except HTTPException as e:
         assert e.status_code == 401
