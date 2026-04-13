@@ -30,6 +30,7 @@ class MockFastAPIModule(types.ModuleType):
                     return func
                 return decorator
         self.FastAPI = FastAPI
+        self.Request = MagicMock()
         class HTTPException(Exception):
             def __init__(self, status_code, detail):
                 self.status_code = status_code
