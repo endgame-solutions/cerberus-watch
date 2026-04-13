@@ -30,6 +30,9 @@
             font-weight: 300;
             margin-bottom: 30px;
         }
+        h1:focus {
+            outline: none;
+        }
         .button {
             background-color: #d1b894; /* Soft Amber */
             color: #ffffff;
@@ -96,43 +99,45 @@
 </head>
 <body>
     <div id="safety-check-screen" class="container">
-        <h1>Are you safe right now?</h1>
+        <h1 tabindex="-1">Are you safe right now?</h1>
         <button class="button" onclick="showIntakeForm()">Yes, I'm safe</button>
         <button class="button" onclick="showNotSafeResources()">I'm not sure</button>
     </div>
 
     <div id="not-safe-resources" class="container hidden">
         <button class="button quick-exit" onclick="quickExit()">Quick Exit</button>
-        <h1>Take a breath. You’re not alone.</h1>
+        <h1 tabindex="-1">Take a breath. You’re not alone.</h1>
         <p>If you are in immediate danger, please call your local emergency services (e.g., 911, 999, 112).</p>
         <p><strong>National Domestic Violence Hotline:</strong> 1-800-799-7233</p>
         <button class="button" onclick="enableSilentMode()">Enable Silent Mode</button>
     </div>
 
     <div id="intake-form-screen" class="container hidden">
-        <h1>Tell me about the person you're meeting.</h1>
+        <h1 tabindex="-1">Tell me about the person you're meeting.</h1>
         <p class="transparency-statement">You're in control. We don’t save or share what you tell us. Every field is optional.</p>
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name">
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="text" id="phone" name="phone">
-        </div>
-        <div class="form-group">
-            <label for="social">Social Media Link</label>
-            <input type="text" id="social" name="social">
-        </div>
-        <div class="form-group">
-            <label for="dating-profile">Dating Profile Link</label>
-            <input type="text" id="dating-profile" name="dating-profile">
-        </div>
-        <button class="button" onclick="submitAnalysis()">Analyze</button>
+        <form id="intake-form" onsubmit="event.preventDefault(); submitAnalysis();">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="social">Social Media Link</label>
+                <input type="text" id="social" name="social">
+            </div>
+            <div class="form-group">
+                <label for="dating-profile">Dating Profile Link</label>
+                <input type="text" id="dating-profile" name="dating-profile">
+            </div>
+            <button type="submit" class="button">Analyze</button>
+        </form>
     </div>
 
     <div id="results-screen" class="container hidden">
-        <h1>Risk Advisory</h1>
+        <h1 tabindex="-1">Risk Advisory</h1>
         <div id="safety-score"></div>
         <div id="summary" style="text-align: left; margin-top: 20px;"></div>
         <button class="button" onclick="startOver()">Start Over</button>
@@ -144,7 +149,15 @@
             document.getElementById('not-safe-resources').classList.add('hidden');
             document.getElementById('intake-form-screen').classList.add('hidden');
             document.getElementById('results-screen').classList.add('hidden');
-            document.getElementById(screenId).classList.remove('hidden');
+
+            const newScreen = document.getElementById(screenId);
+            newScreen.classList.remove('hidden');
+
+            // Set focus to the heading of the new screen for accessibility
+            const heading = newScreen.querySelector('h1');
+            if (heading) {
+                heading.focus();
+            }
         }
 
         function showIntakeForm() {
