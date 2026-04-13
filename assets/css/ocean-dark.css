@@ -29,6 +29,11 @@
 }
 
 /* Base Styles */
+:focus-visible {
+  outline: 2px solid var(--ocean-accent-primary);
+  outline-offset: 2px;
+}
+
 body {
   background-color: var(--ocean-bg-dark);
   color: var(--ocean-text-primary);
@@ -454,6 +459,26 @@ a:hover {
   margin-bottom: 1rem;
   border: 1px solid transparent;
   border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert .close {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.3s ease;
+}
+
+.alert .close:hover {
+  opacity: 1;
 }
 
 .alert-success {
