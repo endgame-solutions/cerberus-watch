@@ -3,6 +3,9 @@
  * Main functionality for the Cerberus dashboard
  */
 
+// Cache for stat values to improve performance
+let cachedStatValues = null;
+
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize the dashboard
@@ -76,12 +79,14 @@ function setupEventListeners() {
  * In a real implementation, this would fetch data from an API
  */
 function updateStats() {
-    // Get all stat value elements
-    const statValues = document.querySelectorAll('.stat-value');
+    // Cache stat value elements and convert to Array for faster iteration
+    if (!cachedStatValues) {
+        cachedStatValues = Array.from(document.querySelectorAll('.stat-value'));
+    }
     
     // Update each stat with a random value
-    statValues.forEach(function(stat) {
-        const dataType = stat.getAttribute('data-type');
+    cachedStatValues.forEach(function(stat) {
+        const dataType = stat.dataset.type;
         let value;
         
         switch (dataType) {
